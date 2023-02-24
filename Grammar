@@ -1,0 +1,57 @@
+// content_script.js
+
+// This script will run on all pages
+
+// Listen for messages from the background script
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  // Check if the message is to check the grammar and spelling
+  if (request.action === "checkGrammarAndSpelling") {
+    // Get the text on the page
+    var text = getPageText();
+    // Check the grammar and spelling
+    var correctedText = checkGrammarAndSpelling(text);
+    // Send the corrected text back to the background script
+    sendResponse({ correctedText: correctedText });
+  }
+});
+
+// Get all the text on the page
+function getPageText() {
+  // Your implementation to get all the text on the page
+}
+
+// Check the grammar and spelling of the text
+function checkGrammarAndSpelling(text) {
+  // Your implementation to check the grammar and spelling of the text
+}
+
+// background.js
+
+// This script runs in the background and listens for messages from the content script
+
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  // Check if the message is to check the grammar and spelling
+  if (request.action === "checkGrammarAndSpelling") {
+    // Get the corrected text from the content script
+    var correctedText = request.correctedText;
+    // Your implementation to display the corrected text
+  }
+});
+
+// manifest.json
+
+{
+  "manifest_version": 2,
+  "name": "Grammar and Spelling Correction Extension",
+  "version": "1.0",
+  "content_scripts": [
+    {
+      "js": ["content_script.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "permissions": ["<all_urls>"]
+}
